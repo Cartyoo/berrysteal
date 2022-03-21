@@ -1,1 +1,108 @@
+every 3 minutes:
+ loop all players:
+  send "&4[&5&lAnnouncment&4] &rClick <link:https://discord.gg/YourLinkHere>&9Here &rto our join discord" to loop-player
 
+command /announce <text>:
+    permission: announce
+	permission message: &cYou can't do that!
+    description: announces
+    trigger:
+        broadcast "&4[&5Announcment&4] &4%coloured arg-1%"
+
+command /cc:
+    permission: chat.clear
+    permission message: &cYou can't do that!
+    trigger:
+	ali
+        loop 2500 times:
+			broadcast "[!] &5&lChat has been cleared by %player%! [!]"
+options:
+    cooldown: 24 hours
+   
+command daily:
+    trigger:
+        set {_waited} to difference between {dailyReward::%uuid of player%} and now
+        if {_waited} is less than {@cooldown}:
+            send "&7[&5&l!&7] &rYou must wait %difference between {@cooldown} and {_waited}% before claiming your daily reward again"
+        else:
+            set {dailyReward::%uuid of player%} to now
+            execute console command "crate givekey %player% daily"
+            send "&7[&5&l!&7] &rHere is your daily reward."
+
+command /sethub:
+	permission: sethub.use
+	permission message: &cYou can't do that!
+	trigger:
+		set {hub} to player's location
+
+command /hub:
+	trigger:	
+		teleport player to {hub}
+
+command /setspawn:
+	permission: setspawn.use
+	permission message: &cYou can't do that!
+	trigger:
+		set {spawn} to player's location
+
+command /spawn:
+	trigger:
+		teleport player to {spawn}
+
+on chat:
+	if player does not have permission "chatcolor.use":
+		set the chat format to "%player's prefix% %player's displayname% %player's suffix%&r: &f%message%"
+else:
+	if player has permission "chatcolor.use":
+		set the chat format to "%player's prefix% %player's displayname% %player's suffix%&r: %coloured message%"
+
+command /mutechat:
+    permission: chat.mute
+    permission message: &c You don't have the required permission to perform that command.
+    trigger:
+        if {Globalchat} is not set:
+            set {Globalchat} to true
+            broadcast "&5&lChat has been muted by &5&l%player%"
+            stop trigger
+
+        if {Globalchat} is set:
+            clear {Globalchat}
+            broadcast "&5&lChat has been unmuted by &5&l%player%"
+
+on chat:
+    if {Globalchat} is true:
+        if player has permission "chat.mute.bypass":
+            stop trigger
+        else:
+            cancel event
+            send "&5&lChat is currently muted."
+
+command /rtp:
+	trigger:
+		set {_x} to round(random number between -3000 and 3000)
+		set {_z} to round(random number between -3000 and 3000)
+		set {_block} to block at location at ({_x}, 0, {_z}) in world event-world
+		loop all blocks above {_block}:
+			if loop-block is not air:
+				block below loop-block is not water
+				block below loop-block is not air
+				if block above loop-block is air:
+					teleport player to loop-block
+					send "&1Teleported to a random location" to player
+
+#welcome.sk
+on join:
+    set join message to ""
+	broadcast "&a[&1+&a] &l%player%"
+    
+on quit:
+    set quit message to ""
+	broadcast "&c[&l-&c] &l%player%"
+
+on load:
+  send "Useful.sk Made by cartyoo#6969" to console
+
+on join:
+  if player has permission "*":
+    wait 5 seconds
+      send "&b(%file%) &1Useful.sk by &6&lcartyoo#6969" to player
