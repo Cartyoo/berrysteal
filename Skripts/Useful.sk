@@ -3,19 +3,20 @@ every 3 minutes:
   send "&4[&5&lAnnouncment&4] &rClick <link:https://discord.gg/YourLinkHere>&9Here &rto our join discord" to loop-player
 
 command /announce <text>:
-    permission: announce
-	permission message: &cYou can't do that!
-    description: announces
+    permission: announce.use
+    permission message: &cYou can't do that!
+    aliases: /bc, /broadcast
     trigger:
         broadcast "&4[&5Announcment&4] &4%coloured arg-1%"
 
 command /cc:
     permission: chat.clear
     permission message: &cYou can't do that!
+    aliases: /clearchat
     trigger:
-	ali
-        loop 2500 times:
-			broadcast "[!] &5&lChat has been cleared by %player%! [!]"
+        loop 3000 times:
+            broadcast " "
+        broadcast "&5&l[BerrySteal] Chat has been cleared by %player%!"
 options:
     cooldown: 24 hours
    
@@ -52,7 +53,8 @@ command /spawn:
 on chat:
 	if player does not have permission "chatcolor.use":
 		set the chat format to "%player's prefix% %player's displayname% %player's suffix%&r: &f%message%"
-else:
+
+on chat:
 	if player has permission "chatcolor.use":
 		set the chat format to "%player's prefix% %player's displayname% %player's suffix%&r: %coloured message%"
 
@@ -90,19 +92,18 @@ command /rtp:
 					teleport player to loop-block
 					send "&1Teleported to a random location" to player
 
-#welcome.sk
 on join:
     set join message to ""
-	broadcast "&a[&1+&a] &l%player%"
+    broadcast "&a[&1+&a] &l%player%"
     
 on quit:
     set quit message to ""
-	broadcast "&c[&l-&c] &l%player%"
+    broadcast "&c[&l-&c] &l%player%"
 
 on load:
-  send "Useful.sk Made by cartyoo#6969" to console
+  send "Useful.sk Made by Cartyoo" to console
 
 on join:
   if player has permission "*":
     wait 5 seconds
-      send "&b(%file%) &1Useful.sk by &6&lcartyoo#6969" to player
+    send "&1Useful.sk by &6&lcartyoo" to player
